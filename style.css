@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+}
+
+.content {
+    width: 100vw;
+    height: 100vh;
+    background-color: grey;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    display: flex;
+}
+
+.logo {
+    margin-left: auto;
+}
+
+.weatherInfo {
+    display: flex;
+    gap: 50px;
+    margin-top: auto;
+}

@@ -1,19 +1,50 @@
 const inputCity = document.querySelector("#inputCity")
 const cityButton = document.querySelector(".cityButton")
-
+const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const moths = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 const apiURL = "https://api.openweathermap.org/data/2.5/weather?"
 
 cityButton.addEventListener("click", () => {
-    const apiCity = inputCity.value
-    const apiKey = "8d1eb409ef57e4fe5939de84f94bcd77"
-    const apiCall = `${apiURL}q=${apiCity}&appid=${apiKey}`
+    removeDisplay(".cityInfo");
+    removeDisplay(".weatherInfo");
+    let localData = getLocalData()
+    console.log(localData)
+    const apiCity = inputCity.value;
+    const apiKey = "8d1eb409ef57e4fe5939de84f94bcd77";
+    const apiCall = `${apiURL}q=${apiCity}&appid=${apiKey}`;
     displayFetch(apiCall).then(res => {
         console.log(res)
-        addElement("div", ".temperature", `${KelvinToCelsius(res.main.temp)}°C`, ".weatherDisplay" );
-        addElement("div", ".feel", `Feels like ${KelvinToCelsius(res.main.feels_like)}`, ".weatherDisplay")
-        addElement("div", ".feel", `Humidity ${res.main.humidity}%`, ".weatherDisplay")
+        addElement("div", "city", res.name, ".cityInfo" );
+        addElement("div", "date", localData, ".cityInfo" );
+        addElement("div", "cloudiness", res.weather[0].description, ".weatherInfo")
+        addElement("div", "temperature", `${KelvinToCelsius(res.main.temp)}°C`, ".weatherInfo" );
+        addElement("div", "feel", `Feels like ${KelvinToCelsius(res.main.feels_like)}`, ".weatherInfo")
+        addElement("div", "humidity", `Humidity ${res.main.humidity}%`, ".weatherInfo")
     })
+    inputCity.value =""
 })
+
+
+
+function removeDisplay(parent) {
+    const element = document.querySelector(parent)
+    while( element.hasChildNodes() ){
+        element.removeChild(element.lastChild);
+    }
+}
+
+//date and time only works for local pc
+function getLocalData() {
+    const today = new Date();
+    const time = today.getHours() + ":" + today.getMinutes();
+    const weekday = today.getDay();
+    const date = today.getDate()
+    const month = today.getMonth();
+    const year = today.getFullYear();
+    const localData = `${time} - ${weekdays[weekday]}, ${date} ${moths[month]} ${year}`
+    return localData
+    
+}
 
 function addElement(elementType, elementClass, elementText, elementParent) {
     const el = document.createElement(elementType)
@@ -35,9 +66,5 @@ async function displayFetch(api) {
     return data
 }
 
-
-function displayTemperature() {
-    addElement("div", ".temperature")
-}
 
 
