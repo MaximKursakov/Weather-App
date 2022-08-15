@@ -7,30 +7,37 @@ cityButton.addEventListener("click", () => {
     const apiCity = inputCity.value
     const apiKey = "8d1eb409ef57e4fe5939de84f94bcd77"
     const apiCall = `${apiURL}q=${apiCity}&appid=${apiKey}`
-    displayFetch(apiCall)
+    displayFetch(apiCall).then(res => {
+        console.log(res)
+        addElement("div", ".temperature", `${KelvinToCelsius(res.main.temp)}°C`, ".weatherDisplay" );
+        addElement("div", ".feel", `Feels like ${KelvinToCelsius(res.main.feels_like)}`, ".weatherDisplay")
+        addElement("div", ".feel", `Humidity ${res.main.humidity}%`, ".weatherDisplay")
+    })
 })
 
 function addElement(elementType, elementClass, elementText, elementParent) {
     const el = document.createElement(elementType)
     el.classList.add(elementClass)
     el.innerHTML = elementText
-    elementParent.append(el)
+    const parent = document.querySelector(elementParent)
+    parent.append(el)
 }
 
 function KelvinToCelsius (Kelvin) {
     const Temperature = Kelvin - 273.15
-    return  Temperature
+    return  Temperature.toFixed(0)
     
 }
 
-console.log(KelvinToCelsius(300))
+async function displayFetch(api) {
+    let response = await fetch(api)
+    let data = await response.json()
+    return data
+}
 
-function displayFetch(api) {
-fetch(api)
-    .then(res => {
-        return res.json()})
-        .then(data => {
-            console.log(data)})
-        }
+
+function displayTemperature() {
+    addElement("div", ".temperature")
+}
 
 
