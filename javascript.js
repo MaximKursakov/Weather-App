@@ -45,18 +45,33 @@ function removeDisplay(parent) {
 
 function getLocalData(time) {
     const today = new Date();
-    let hours = today.getUTCHours() + time;
-    hours = hours < 10 ? "0" + hours : hours
+    let weekday = today.getDay();
+    let date = today.getDate()
+    let month = today.getMonth();
+    let year = today.getFullYear();
     let minutes = today.getMinutes();
     minutes = minutes < 10 ? "0" + minutes : minutes
-    const weekday = today.getDay();
-    const date = today.getDate()
-    const month = today.getMonth();
-    const year = today.getFullYear();
+    let hours = today.getUTCHours() + time;
+    if (hours < 0) {
+        hours = 24 + hours
+        weekday -= 1;
+        date -= 1
+    }
+    else if (hours > 24) {
+        let difference = hours - 24
+        hours = 0 + difference
+        weekday += 1;
+        date += 1;
+    }
+    if (hours < 10 && hours >= 0) {
+        hours = "0" + hours 
+    }
     const localData = `${hours}:${minutes} - ${weekdays[weekday]}, ${date} ${moths[month]} ${year}`
     return localData
 }
 
+let today = new Date().getUTCDate()
+console.log(today)
 
 function secondsToHours (Timezone) {
     let hour = Timezone / 3600
