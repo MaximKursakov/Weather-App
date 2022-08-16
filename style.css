@@ -1,11 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400&display=swap');
+
 body {
+    font-family: raleway;
+    font-weight: 200;
     margin: 0;
+}
+
+#inputCity {
+    width: 100px;
+}
+
+.cityButton {
+    width: 100px;
 }
 
 .content {
     width: 100vw;
     height: 100vh;
-    background-color: grey;
+    background-image: url(images/cloudless\,\ morning.jpg);
     display: flex;
     flex-direction: column;
 }
@@ -19,7 +31,34 @@ body {
 }
 
 .weatherInfo {
+    height: 35%;
+    backdrop-filter:blur(16px);
+    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) );
+    text-align: center;
     display: flex;
+    align-items: center;
     gap: 50px;
     margin-top: auto;
+    font-size: 1.2rem;
+    color: white;
+}
+.overallWeather {
+    margin-left: 50px;
+}
+
+
+.weather {
+    margin-top: 30px;
+}
+
+.fa-sun {
+    margin-top: 50px;
+    font-size: 6rem;
+    color: #f7eba1;
+}
+
+.otherInfo {
+    margin-left: auto;
+    display: flex;
+    gap: 100px;
 }

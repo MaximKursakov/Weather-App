@@ -6,20 +6,30 @@ const apiURL = "https://api.openweathermap.org/data/2.5/weather?"
 
 cityButton.addEventListener("click", () => {
     removeDisplay(".cityInfo");
-    removeDisplay(".weatherInfo");
-    let localData = getLocalData()
-    console.log(localData)
+    removeDisplay(".overallWeather");
+    removeDisplay(".temperatureInfo");
+    removeDisplay(".otherInfo");
+    
+    const regionNames = new Intl.DisplayNames(
+        ['en'], {type: 'region'}
+      );
     const apiCity = inputCity.value;
     const apiKey = "8d1eb409ef57e4fe5939de84f94bcd77";
     const apiCall = `${apiURL}q=${apiCity}&appid=${apiKey}`;
     displayFetch(apiCall).then(res => {
+        const localData = getLocalData(secondsToHours(res.timezone))
         console.log(res)
         addElement("div", "city", res.name, ".cityInfo" );
+        addElement("div", "country", regionNames.of(res.sys.country), ".cityInfo" );
         addElement("div", "date", localData, ".cityInfo" );
-        addElement("div", "cloudiness", res.weather[0].description, ".weatherInfo")
-        addElement("div", "temperature", `${KelvinToCelsius(res.main.temp)}°C`, ".weatherInfo" );
-        addElement("div", "feel", `Feels like ${KelvinToCelsius(res.main.feels_like)}`, ".weatherInfo")
-        addElement("div", "humidity", `Humidity ${res.main.humidity}%`, ".weatherInfo")
+        addElement("div", "fa-solid", "", ".overallWeather").addSecondClass("fa-sun")
+        addElement("div", "weather", res.weather[0].description, ".overallWeather")
+        addElement("div", "temperature", `Temperature ${KelvinToCelsius(res.main.temp)}°C`, ".temperatureInfo" );
+        addElement("div", "feel", `Feels like ${KelvinToCelsius(res.main.feels_like)}°C`, ".temperatureInfo")
+        addElement("div", "humidity", `Humidity (%) ${res.main.humidity}%`, ".otherInfo")
+        addElement("div", "windiness", `Wind (m/s) ${res.wind.speed}%`, ".otherInfo")
+        addElement("div", "cloudiness", `Clouds (%) ${res.clouds.all}%`, ".otherInfo")
+
     })
     inputCity.value =""
 })
@@ -33,18 +43,28 @@ function removeDisplay(parent) {
     }
 }
 
-//date and time only works for local pc
-function getLocalData() {
+function getLocalData(time) {
     const today = new Date();
-    const time = today.getHours() + ":" + today.getMinutes();
+    let hours = today.getUTCHours() + time;
+    hours = hours < 10 ? "0" + hours : hours
+    let minutes = today.getMinutes();
+    minutes = minutes < 10 ? "0" + minutes : minutes
     const weekday = today.getDay();
     const date = today.getDate()
     const month = today.getMonth();
     const year = today.getFullYear();
-    const localData = `${time} - ${weekdays[weekday]}, ${date} ${moths[month]} ${year}`
+    const localData = `${hours}:${minutes} - ${weekdays[weekday]}, ${date} ${moths[month]} ${year}`
     return localData
-    
 }
+
+
+function secondsToHours (Timezone) {
+    let hour = Timezone / 3600
+    return hour
+}
+
+let TimeZoneDifference = secondsToHours(7200)
+console.log(TimeZoneDifference)
 
 function addElement(elementType, elementClass, elementText, elementParent) {
     const el = document.createElement(elementType)
@@ -52,6 +72,11 @@ function addElement(elementType, elementClass, elementText, elementParent) {
     el.innerHTML = elementText
     const parent = document.querySelector(elementParent)
     parent.append(el)
+    return {
+        addSecondClass(secondClass) {
+            el.classList.add(secondClass)
+        }
+    }
 }
 
 function KelvinToCelsius (Kelvin) {
