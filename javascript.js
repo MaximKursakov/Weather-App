@@ -1,40 +1,83 @@
 const inputCity = document.querySelector("#inputCity")
 const cityButton = document.querySelector(".cityButton")
+const content = document.querySelector(".content")
+const generalWeatherIcon = document.querySelector(".overallWeather i")
 const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const moths = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 const apiURL = "https://api.openweathermap.org/data/2.5/weather?"
 
-cityButton.addEventListener("click", () => {
-    removeDisplay(".cityInfo");
-    removeDisplay(".overallWeather");
-    removeDisplay(".temperatureInfo");
-    removeDisplay(".otherInfo");
-    
+cityButton.addEventListener("click" , () => {
+    cityButton.classList.add("slide-out")
+    setTimeout(() => {
+        cityButton.classList.replace("slide-out", "hide")
+        inputCity.classList.replace("hide", "slide-in")
+        setTimeout(() => {
+            inputCity.classList.remove("slide-in")
+        }, 300);
+    }, 300);
+})
+
+inputCity.addEventListener("keypress", (e) =>{
+    if (13 === e.keyCode) {
+    (function resetData() {
+        removeDisplay(".cityInfo");
+        removeDisplay(".localTime");
+        removeDisplay(".overallWeather");
+        removeDisplay(".temperatureInfo");
+        removeDisplay(".humidityInfo");
+        removeDisplay(".windInfo");
+        removeDisplay(".cloudInfo");
+    })();
     const regionNames = new Intl.DisplayNames(
         ['en'], {type: 'region'}
       );
     const apiCity = inputCity.value;
     const apiKey = "8d1eb409ef57e4fe5939de84f94bcd77";
     const apiCall = `${apiURL}q=${apiCity}&appid=${apiKey}`;
-    displayFetch(apiCall).then(res => {
-        const localData = getLocalData(secondsToHours(res.timezone))
+    getFetchData(apiCall).then(res => {
+        const localTimeAndDate = getLocalData(secondsToHours(res.timezone))
         console.log(res)
+        const generalWeather = res.weather[0].main
+        if (generalWeather === "Clear") {
+            replaceUnknownclass(content, "content", "backgroundSunny")
+        }
+        else if (generalWeather === "Clouds") {
+            replaceUnknownclass(content, "content", "backgroundCloudy")
+        }
+        else if (generalWeather === "Rain") {
+            replaceUnknownclass(content, "content", "backgroundRainy")
+        }
+        else if (generalWeather === "Snow") {
+            replaceUnknownclass(content, "content", "backgroundSnow")
+        }
+        else if (generalWeather === "Drizzle") {
+            replaceUnknownclass(content, "content", "backgroundDrizzle")
+        }
+        else if (generalWeather === "Thunderstorm") {
+            replaceUnknownclass(content, "content", "backgroundThunderstorm")
+        }
         addElement("div", "city", res.name, ".cityInfo" );
         addElement("div", "country", regionNames.of(res.sys.country), ".cityInfo" );
-        addElement("div", "date", localData, ".cityInfo" );
+        addElement("div", "date", localTimeAndDate, ".localTime" );
         addElement("div", "fa-solid", "", ".overallWeather").addSecondClass("fa-sun")
         addElement("div", "weather", res.weather[0].description, ".overallWeather")
-        addElement("div", "temperature", `Temperature ${KelvinToCelsius(res.main.temp)}°C`, ".temperatureInfo" );
-        addElement("div", "feel", `Feels like ${KelvinToCelsius(res.main.feels_like)}°C`, ".temperatureInfo")
-        addElement("div", "humidity", `Humidity (%) ${res.main.humidity}%`, ".otherInfo")
-        addElement("div", "windiness", `Wind (m/s) ${res.wind.speed}%`, ".otherInfo")
-        addElement("div", "cloudiness", `Clouds (%) ${res.clouds.all}%`, ".otherInfo")
-
+        addElement("div", "temperature", `${KelvinToCelsius(res.main.temp)}°`, ".temperatureInfo" );
+        addElement("div", "feel", `${KelvinToCelsius(res.main.feels_like)}°`, ".temperatureInfo")
+        addElement("div", "humidity", res.main.humidity, ".humidityInfo")
+        addElement("div", "windiness", res.wind.speed, ".windInfo")
+        addElement("div", "cloudiness", res.clouds.all, ".cloudInfo")
     })
+    inputCity.classList.add("slide-out")
+        setTimeout(() => {
+            inputCity.classList.replace("slide-out", "hide")
+            cityButton.classList.replace("hide", "slide-in")
+            setTimeout(() => {
+                cityButton.classList.remove("slide-in")
+            }, 300);
+        }, 300);
     inputCity.value =""
+    }
 })
-
-
 
 function removeDisplay(parent) {
     const element = document.querySelector(parent)
@@ -46,20 +89,20 @@ function removeDisplay(parent) {
 function getLocalData(time) {
     const today = new Date();
     let weekday = today.getDay();
-    let date = today.getDate()
+    let date = today.getDate();
     let month = today.getMonth();
     let year = today.getFullYear();
     let minutes = today.getMinutes();
-    minutes = minutes < 10 ? "0" + minutes : minutes
+    minutes = minutes < 10 ? "0" + minutes : minutes;
     let hours = today.getUTCHours() + time;
     if (hours < 0) {
         hours = 24 + hours
         weekday -= 1;
-        date -= 1
+        date -= 1;
     }
     else if (hours > 24) {
-        let difference = hours - 24
-        hours = 0 + difference
+        let timeAfter24 = hours - 24;
+        hours = 0 + timeAfter24;
         weekday += 1;
         date += 1;
     }
@@ -70,16 +113,17 @@ function getLocalData(time) {
     return localData
 }
 
-let today = new Date().getUTCDate()
-console.log(today)
-
 function secondsToHours (Timezone) {
     let hour = Timezone / 3600
     return hour
 }
 
-let TimeZoneDifference = secondsToHours(7200)
-console.log(TimeZoneDifference)
+function replaceUnknownclass(Element, defaultClass, newClass) {
+    console.log(Element)
+    Element.removeAttribute("class")
+    Element.classList.add(defaultClass)
+    Element.classList.add(newClass)
+}
 
 function addElement(elementType, elementClass, elementText, elementParent) {
     const el = document.createElement(elementType)
@@ -100,7 +144,7 @@ function KelvinToCelsius (Kelvin) {
     
 }
 
-async function displayFetch(api) {
+async function getFetchData(api) {
     let response = await fetch(api)
     let data = await response.json()
     return data
@@ -108,3 +152,10 @@ async function displayFetch(api) {
 
 
 
+// on enterclick:
+    // animation on :overall weather + termperature + feels like + humidity + windiness + cloudiness + city, country + date
+        //first animation (before fetch displayed): translate up / roll up -> than hide
+        //second animation (after ftch displayed first done): translate  up fro/ roll up from hidden
+
+
+        //morgen: animation in factory funciton setzten.

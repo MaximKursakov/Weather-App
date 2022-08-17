@@ -1,4 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400&family=Roboto:wght@100&display=swap');
+
+@keyframes slide {
+    0% {visibility: visible; transform: translateX(0%);}
+    100% {visibility: hidden; transform: translateX(100%);}
+}
+
+.slide-out {
+    animation-name: slide;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+}
+
+.slide-in {
+    animation-direction: reverse;
+    animation-name: slide;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+}
 
 body {
     font-family: raleway;
@@ -6,44 +24,156 @@ body {
     margin: 0;
 }
 
-#inputCity {
-    width: 100px;
-}
-
-.cityButton {
-    width: 100px;
-}
-
 .content {
     width: 100vw;
     height: 100vh;
-    background-image: url(images/cloudless\,\ morning.jpg);
     display: flex;
     flex-direction: column;
 }
+
+.backgroundSunny, .backgroundCloudy, .backgroundRainy, .backgroundSnow, .backgroundThunderstorm, .backgroundDrizzle {
+    background-position: center;
+    background-repeat: no-repeat ;
+    background-size: cover;
+}
+
+.backgroundSunny {
+    background-image: url(images/cloudless\,\ morning.jpg);
+}
+
+.backgroundCloudy {
+    background-image: url(images/cloudy.jpg);
+}
+
+.backgroundRainy {
+    background-image: url(images/rain.jpg);
+
+}
+
+.backgroundSnow {
+    background-image: url(images/snow.jpg);
+
+}
+
+.backgroundDrizzle {
+    background-image: url(images/drizzle.jpg);
+
+}
+
+.backgroundThunderstorm {
+    background-image: url(images/thunderstorm.jpg);
+
+}
+
+#inputCity {
+    height: 40px;
+    width: 200px;
+    align-self: flex-end;
+    margin-top: 100px;
+    padding-left: 10px;
+    background: rgb(243, 240, 240);
+    border: none;
+    color: rgb(167, 164, 164);
+    font-family: raleway;
+    font-size: 1.3rem;
+    position: absolute;
+    top: 20%;
+    overflow-x: hidden;
+}
+
+
+#inputCity:focus {
+    outline: none;
+}
+
+.search {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-top: 60px;
+    width: 300px;
+    height: 100%;
+    right: -200px;
+    transition: transform 1s;
+    transition-delay: 1s;
+    overflow: hidden;
+}
+
+.logo {
+    font-family: roboto;
+    color: white;
+    font-size: 3rem;
+    margin-right: 60px;
+}
+
+.cityButton {
+    cursor: pointer;
+    align-self: flex-end;
+    margin-top: 100px;
+    background: rgb(243, 240, 240);
+    border: none;
+    color: white;
+    font-family: raleway;
+    width: 70px;
+    position: absolute;
+    top: 20%;
+    overflow-x: hidden;
+
+}
+
+.fa-magnifying-glass {
+    font-size: 1.3rem;
+    padding: 10px 0;
+    color:rgb(167, 164, 164);
+}
+
+
+
 
 .main {
     display: flex;
 }
 
-.logo {
-    margin-left: auto;
+.cityInfo {
+    font-weight: 300;
+    display: flex;
+    gap: 10px;
+    margin-left: 60px;
+    margin-top: 60px;
+    color: white;
+}
+
+.city {
+    font-size: 3rem;
+}
+
+.country {
+    font-size: 1.5rem;
+    margin-top: 25px;
+}
+
+
+
+.localTime {
+    color: white;
+    margin-left: 60px;
+    font-size: 1.2rem;
 }
 
 .weatherInfo {
     height: 35%;
     backdrop-filter:blur(16px);
-    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) );
+    background: linear-gradient( rgba(201, 199, 199, 0.3), rgba(204, 202, 202, 0.3) );
     text-align: center;
     display: flex;
     align-items: center;
-    gap: 50px;
     margin-top: auto;
     font-size: 1.2rem;
     color: white;
 }
 .overallWeather {
     margin-left: 50px;
+    margin-bottom: 40px;
 }
 
 
@@ -57,8 +187,58 @@ body {
     color: #f7eba1;
 }
 
-.otherInfo {
-    margin-left: auto;
+
+.temperatureInfo {
     display: flex;
-    gap: 100px;
+    flex-direction: column;
+    gap: 20px;
+    margin-left: 60px;
+    margin-right: 20px;
+    font-size: 4rem;
+    font-weight: 400;
+}
+
+.temperatureText {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    text-align: left;
+}
+
+.humidityColumn, .windColumn, .cloudColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 15%;
+    border-left: solid grey 1px;
+    height: 100%;
+}
+
+.fa-droplet, .fa-wind, .fa-cloud{
+    font-size: 2rem;
+}
+
+
+
+.humidityColumn {
+    margin-left: auto;
+}
+
+.cloudColumn {
+    margin-right: 60px;
+    border-right: solid grey 1px;
+}
+
+.humidity, .windiness, .cloudiness {
+    width: 50px;
+    border-top: solid rgb(185, 185, 185) 1px;
+    padding-top: 10px;
+    font-size: 1.7rem;
+    font-weight: 400;
+}
+
+.hide {
+    visibility: hidden;
 }
