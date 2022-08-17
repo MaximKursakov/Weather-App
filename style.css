@@ -9,6 +9,7 @@
     animation-name: slide;
     animation-duration: 0.3s;
     animation-fill-mode: forwards;
+    /* overflow-x: hidden; */
 }
 
 .slide-in {
@@ -16,12 +17,15 @@
     animation-name: slide;
     animation-duration: 0.3s;
     animation-fill-mode: forwards;
+    /* overflow-x: hidden; */
+
 }
 
 body {
     font-family: raleway;
     font-weight: 200;
     margin: 0;
+    overflow-x: hidden
 }
 
 .content {
@@ -78,7 +82,7 @@ body {
     font-size: 1.3rem;
     position: absolute;
     top: 20%;
-    overflow-x: hidden;
+    
 }
 
 
@@ -96,7 +100,7 @@ body {
     right: -200px;
     transition: transform 1s;
     transition-delay: 1s;
-    overflow: hidden;
+
 }
 
 .logo {
@@ -117,7 +121,6 @@ body {
     width: 70px;
     position: absolute;
     top: 20%;
-    overflow-x: hidden;
 
 }
 
@@ -161,7 +164,7 @@ body {
 }
 
 .weatherInfo {
-    height: 35%;
+    height: 300px;
     backdrop-filter:blur(16px);
     background: linear-gradient( rgba(201, 199, 199, 0.3), rgba(204, 202, 202, 0.3) );
     text-align: center;
@@ -177,15 +180,16 @@ body {
 }
 
 
+
 .weather {
     margin-top: 30px;
 }
 
-.fa-sun {
+.fa-sun, .overallWeather .fa-cloud, .fa-showers-heavy, .fa-snow, .fa-cloud-drizzle, .fa-cloud-bolt {
     margin-top: 50px;
     font-size: 6rem;
-    color: #f7eba1;
 }
+
 
 
 .temperatureInfo {
@@ -242,3 +246,27 @@ body {
 .hide {
     visibility: hidden;
 }
+
+/* .sun::before, .cloud::before, .thunderstorm::before, .drizzle::before, .rain::before, .snow::before{
+    content: "\f556";
+    font-size: 5rem;
+    font-family: "Font Awesome 5 Free";
+    display: inline-block;
+    color: white;
+    font-weight: 900;
+    font-style: normal;
+    font-variant: normal;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+    margin: 0 auto;
+    
+}
+
+
+.sun {
+    position: relative;
+    margin-top: 170px;
+}
+ */

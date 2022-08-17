@@ -1,7 +1,8 @@
 const inputCity = document.querySelector("#inputCity")
 const cityButton = document.querySelector(".cityButton")
 const content = document.querySelector(".content")
-const generalWeatherIcon = document.querySelector(".overallWeather i")
+const overallWeather = document.querySelector(".overallWeather i")
+console.log(overallWeather)
 const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const moths = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 const apiURL = "https://api.openweathermap.org/data/2.5/weather?"
@@ -13,6 +14,7 @@ cityButton.addEventListener("click" , () => {
         inputCity.classList.replace("hide", "slide-in")
         setTimeout(() => {
             inputCity.classList.remove("slide-in")
+            inputCity.focus()
         }, 300);
     }, 300);
 })
@@ -40,26 +42,35 @@ inputCity.addEventListener("keypress", (e) =>{
         const generalWeather = res.weather[0].main
         if (generalWeather === "Clear") {
             replaceUnknownclass(content, "content", "backgroundSunny")
+            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-sun")
         }
         else if (generalWeather === "Clouds") {
             replaceUnknownclass(content, "content", "backgroundCloudy")
+            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-cloud")
         }
         else if (generalWeather === "Rain") {
             replaceUnknownclass(content, "content", "backgroundRainy")
+            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-showers-heavy")
+
         }
         else if (generalWeather === "Snow") {
             replaceUnknownclass(content, "content", "backgroundSnow")
+            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-snow")
+
         }
         else if (generalWeather === "Drizzle") {
             replaceUnknownclass(content, "content", "backgroundDrizzle")
+            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-cloud-drizzle")
+
         }
         else if (generalWeather === "Thunderstorm") {
             replaceUnknownclass(content, "content", "backgroundThunderstorm")
+            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-cloud-bolt")
+
         }
         addElement("div", "city", res.name, ".cityInfo" );
         addElement("div", "country", regionNames.of(res.sys.country), ".cityInfo" );
         addElement("div", "date", localTimeAndDate, ".localTime" );
-        addElement("div", "fa-solid", "", ".overallWeather").addSecondClass("fa-sun")
         addElement("div", "weather", res.weather[0].description, ".overallWeather")
         addElement("div", "temperature", `${KelvinToCelsius(res.main.temp)}°`, ".temperatureInfo" );
         addElement("div", "feel", `${KelvinToCelsius(res.main.feels_like)}°`, ".temperatureInfo")
@@ -119,7 +130,6 @@ function secondsToHours (Timezone) {
 }
 
 function replaceUnknownclass(Element, defaultClass, newClass) {
-    console.log(Element)
     Element.removeAttribute("class")
     Element.classList.add(defaultClass)
     Element.classList.add(newClass)
