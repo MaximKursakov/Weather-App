@@ -5,11 +5,20 @@
     100% {visibility: hidden; transform: translateX(100%);}
 }
 
+@keyframes slide-up-old {
+    0% {opacity: 100%; transform: translateY(0);}
+    100% {opacity: 0%; transform: translateY(100%);}
+}
+
+@keyframes slide-up-new {
+    0% {opacity: 0%; transform: translateY(100%);}
+    100% {opacity: 100%; transform: translateY(0);}
+}
+
 .slide-out {
     animation-name: slide;
     animation-duration: 0.3s;
     animation-fill-mode: forwards;
-    /* overflow-x: hidden; */
 }
 
 .slide-in {
@@ -17,8 +26,18 @@
     animation-name: slide;
     animation-duration: 0.3s;
     animation-fill-mode: forwards;
-    /* overflow-x: hidden; */
+}
 
+.slide-up-old {
+    animation-name: slide-up-old;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+}
+
+.slide-up-new {
+    animation-name: slide-up-new;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
 }
 
 body {
@@ -42,7 +61,7 @@ body {
 }
 
 .backgroundSunny {
-    background-image: url(images/cloudless\,\ morning.jpg);
+    background-image: url(images/clear\ sky.jpg);
 }
 
 .backgroundCloudy {
@@ -147,17 +166,18 @@ body {
 }
 
 .city {
-    font-size: 3rem;
+    font-size: 4rem;
 }
 
 .country {
-    font-size: 1.5rem;
-    margin-top: 25px;
+    font-size: 2rem;
+    margin-top: 32px;
 }
 
 
 
 .localTime {
+    margin-top: 10px;
     color: white;
     margin-left: 60px;
     font-size: 1.2rem;
@@ -173,41 +193,58 @@ body {
     margin-top: auto;
     font-size: 1.2rem;
     color: white;
+    position: relative;
 }
-.overallWeather {
-    margin-left: 50px;
-    margin-bottom: 40px;
-}
+
+        .overallWeather {
+            margin-left: 50px;
+            margin-bottom: 40px;
+            width: 200px;
+            height: 100%;
+            position: relative;
+        }
 
 
 
 .weather {
-    margin-top: 30px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0 auto 50px auto;
 }
 
 .fa-sun, .overallWeather .fa-cloud, .fa-showers-heavy, .fa-snow, .fa-cloud-drizzle, .fa-cloud-bolt {
-    margin-top: 50px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0 auto 100px auto;
     font-size: 6rem;
 }
 
 
 
-.temperatureInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-left: 60px;
-    margin-right: 20px;
-    font-size: 4rem;
-    font-weight: 400;
-}
+        .temperatureInfo {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+            width: 150px;
+            height: 100%;
+            font-size: 4rem;
+            font-weight: 400;
+        }
 
-.temperatureText {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    text-align: left;
-}
+        .temperatureText {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 40px;
+            width: 500px;
+            height: 100%;
+            text-align: left;
+        }
 
 .humidityColumn, .windColumn, .cloudColumn {
     display: flex;

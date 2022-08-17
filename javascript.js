@@ -1,8 +1,5 @@
 const inputCity = document.querySelector("#inputCity")
 const cityButton = document.querySelector(".cityButton")
-const content = document.querySelector(".content")
-const overallWeather = document.querySelector(".overallWeather i")
-console.log(overallWeather)
 const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const moths = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 const apiURL = "https://api.openweathermap.org/data/2.5/weather?"
@@ -21,15 +18,12 @@ cityButton.addEventListener("click" , () => {
 
 inputCity.addEventListener("keypress", (e) =>{
     if (13 === e.keyCode) {
-    (function resetData() {
-        removeDisplay(".cityInfo");
-        removeDisplay(".localTime");
-        removeDisplay(".overallWeather");
-        removeDisplay(".temperatureInfo");
-        removeDisplay(".humidityInfo");
-        removeDisplay(".windInfo");
-        removeDisplay(".cloudInfo");
-    })();
+        const element1 = document.querySelector(".weather")
+        //
+        element1.classList.add("slide-up-old")
+        setTimeout(() => {
+            element1.classList.remove("slide-up-old")
+        }, 300);
     const regionNames = new Intl.DisplayNames(
         ['en'], {type: 'region'}
       );
@@ -37,47 +31,50 @@ inputCity.addEventListener("keypress", (e) =>{
     const apiKey = "8d1eb409ef57e4fe5939de84f94bcd77";
     const apiCall = `${apiURL}q=${apiCity}&appid=${apiKey}`;
     getFetchData(apiCall).then(res => {
+        removePastQuerry()
         const localTimeAndDate = getLocalData(secondsToHours(res.timezone))
         console.log(res)
         const generalWeather = res.weather[0].main
         if (generalWeather === "Clear") {
-            replaceUnknownclass(content, "content", "backgroundSunny")
-            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-sun")
+            replaceUnknownclass(".content", "content", "backgroundSunny")
+            swapIcon("fa-sun")
         }
         else if (generalWeather === "Clouds") {
-            replaceUnknownclass(content, "content", "backgroundCloudy")
-            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-cloud")
+            replaceUnknownclass(".content", "content", "backgroundCloudy")
+            swapIcon("fa-cloud")
         }
         else if (generalWeather === "Rain") {
-            replaceUnknownclass(content, "content", "backgroundRainy")
-            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-showers-heavy")
+            replaceUnknownclass(".content", "content", "backgroundRainy")
+            swapIcon("fa-showers-heavy")
 
         }
         else if (generalWeather === "Snow") {
-            replaceUnknownclass(content, "content", "backgroundSnow")
-            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-snow")
+            replaceUnknownclass(".content", "content", "backgroundSnow")
+            swapIcon("fa-snow")
 
         }
         else if (generalWeather === "Drizzle") {
-            replaceUnknownclass(content, "content", "backgroundDrizzle")
-            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-cloud-drizzle")
+            replaceUnknownclass(".content", "content", "backgroundDrizzle")
+            swapIcon("fa-cloud-drizzle")
 
         }
         else if (generalWeather === "Thunderstorm") {
-            replaceUnknownclass(content, "content", "backgroundThunderstorm")
-            addElement("i", "fa-solid", "", ".overallWeather").addSecondClass("fa-cloud-bolt")
-
+            replaceUnknownclass(".content", "content", "backgroundThunderstorm")
+            swapIcon("fa-cloud-bolt")
         }
         addElement("div", "city", res.name, ".cityInfo" );
         addElement("div", "country", regionNames.of(res.sys.country), ".cityInfo" );
         addElement("div", "date", localTimeAndDate, ".localTime" );
-        addElement("div", "weather", res.weather[0].description, ".overallWeather")
+        addElement("div", "weather", res.weather[0].description, ".overallWeather").addSecondClass("slide-up-new")
         addElement("div", "temperature", `${KelvinToCelsius(res.main.temp)}°`, ".temperatureInfo" );
         addElement("div", "feel", `${KelvinToCelsius(res.main.feels_like)}°`, ".temperatureInfo")
         addElement("div", "humidity", res.main.humidity, ".humidityInfo")
         addElement("div", "windiness", res.wind.speed, ".windInfo")
         addElement("div", "cloudiness", res.clouds.all, ".cloudInfo")
     })
+    setTimeout(() => {
+        element1.classList.remove("slide-up-new")
+    }, 300);
     inputCity.classList.add("slide-out")
         setTimeout(() => {
             inputCity.classList.replace("slide-out", "hide")
@@ -96,6 +93,15 @@ function removeDisplay(parent) {
         element.removeChild(element.lastChild);
     }
 }
+function removePastQuerry() {
+        removeDisplay(".cityInfo");
+        removeDisplay(".localTime");
+        removeDisplay(".overallWeather");
+        removeDisplay(".temperatureInfo");
+        removeDisplay(".humidityInfo");
+        removeDisplay(".windInfo");
+        removeDisplay(".cloudInfo");
+    }
 
 function getLocalData(time) {
     const today = new Date();
@@ -130,10 +136,13 @@ function secondsToHours (Timezone) {
 }
 
 function replaceUnknownclass(Element, defaultClass, newClass) {
-    Element.removeAttribute("class")
-    Element.classList.add(defaultClass)
-    Element.classList.add(newClass)
+    const el = document.querySelector(Element)
+    el.removeAttribute("class")
+    el.classList.add(defaultClass)
+    el.classList.add(newClass)
 }
+
+function swapIcon(iconClass){addElement("i", "fa-solid", "", ".overallWeather").addSecondClass(iconClass)};
 
 function addElement(elementType, elementClass, elementText, elementParent) {
     const el = document.createElement(elementType)
