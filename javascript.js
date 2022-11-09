@@ -3,6 +3,10 @@ const cityButton = document.querySelector(".cityButton")
 const weekdays = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const moths = ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 const apiURL = "https://api.openweathermap.org/data/2.5/weather?"
+const regionNames = new Intl.DisplayNames(
+    ['en'], {type: 'region'}
+  );
+let humidityArray = []
 
 cityButton.addEventListener("click" , () => {
     cityButton.classList.add("slide-out")
@@ -24,16 +28,36 @@ inputCity.addEventListener("keypress", (e) =>{
         setTimeout(() => {
             element1.classList.remove("slide-up-old")
         }, 300);
-    const regionNames = new Intl.DisplayNames(
-        ['en'], {type: 'region'}
-      );
+    
     const apiCity = inputCity.value;
     const apiKey = "8d1eb409ef57e4fe5939de84f94bcd77";
     const apiCall = `${apiURL}q=${apiCity}&appid=${apiKey}`;
     getFetchData(apiCall).then(res => {
+        displayFetchedData(res)
+    }
+    )
+    .catch(() => {
+        console.log("Error: city not found")
+    })
+    setTimeout(() => {
+        element1.classList.remove("slide-up-new")
+    }, 300);
+    inputCity.classList.add("slide-out")
+        setTimeout(() => {
+            inputCity.classList.replace("slide-out", "hide")
+            cityButton.classList.replace("hide", "slide-in")
+            setTimeout(() => {
+                cityButton.classList.remove("slide-in")
+            }, 300);
+        }, 300);
+    inputCity.value =""
+    }
+})
+
+function displayFetchedData(res) {
+    {
         removePastQuerry()
         const localTimeAndDate = getLocalData(secondsToHours(res.timezone))
-        console.log(res)
         const generalWeather = res.weather[0].main
         if (generalWeather === "Clear") {
             replaceUnknownclass(".content", "content", "backgroundSunny")
@@ -68,24 +92,11 @@ inputCity.addEventListener("keypress", (e) =>{
         addElement("div", "weather", res.weather[0].description, ".overallWeather").addSecondClass("slide-up-new")
         addElement("div", "temperature", `${KelvinToCelsius(res.main.temp)}°`, ".temperatureInfo" );
         addElement("div", "feel", `${KelvinToCelsius(res.main.feels_like)}°`, ".temperatureInfo")
-        addElement("div", "humidity", res.main.humidity, ".humidityInfo")
+        addElement("div", "humidity", res.main.humidity, ".humidityInfo").animateNumbers(humidityArray)
         addElement("div", "windiness", res.wind.speed, ".windInfo")
         addElement("div", "cloudiness", res.clouds.all, ".cloudInfo")
-    })
-    setTimeout(() => {
-        element1.classList.remove("slide-up-new")
-    }, 300);
-    inputCity.classList.add("slide-out")
-        setTimeout(() => {
-            inputCity.classList.replace("slide-out", "hide")
-            cityButton.classList.replace("hide", "slide-in")
-            setTimeout(() => {
-                cityButton.classList.remove("slide-in")
-            }, 300);
-        }, 300);
-    inputCity.value =""
     }
-})
+}
 
 function removeDisplay(parent) {
     const element = document.querySelector(parent)
@@ -153,7 +164,35 @@ function addElement(elementType, elementClass, elementText, elementParent) {
     return {
         addSecondClass(secondClass) {
             el.classList.add(secondClass)
-        }
+        },
+        animateNumbers(arrayName) {
+            if (arrayName.length >= 2) {
+            arrayName.splice(0, 1)
+            }
+            else {
+            arrayName.push(elementText)
+            }
+            const StringToNumber = arrayName.map(str => {
+            return Number(str);
+            });
+            if(StringToNumber[0] < StringToNumber[1]) {
+            let myInterval = setInterval(() => {
+            StringToNumber[0] += 1
+            elementClass.innerHTML = StringToNumber[0]
+            if(StringToNumber[0] === StringToNumber[1]) {
+            clearInterval(myInterval)
+            }
+            }, 20);
+            }else if (StringToNumber[0] > StringToNumber[1]){
+            let myInterval = setInterval(() => {
+            StringToNumber[0] -= 1
+            elementClass.innerHTML = StringToNumber[0]
+            if(StringToNumber[0] === StringToNumber[1]) {
+            clearInterval(myInterval)
+            }
+            }, 20);
+            }
+            }
     }
 }
 
@@ -165,16 +204,13 @@ function KelvinToCelsius (Kelvin) {
 
 async function getFetchData(api) {
     let response = await fetch(api)
+    if(!response.ok) {
+        throw Error(response.statusText);
+    }
     let data = await response.json()
     return data
 }
 
-
-
-// on enterclick:
-    // animation on :overall weather + termperature + feels like + humidity + windiness + cloudiness + city, country + date
-        //first animation (before fetch displayed): translate up / roll up -> than hide
-        //second animation (after ftch displayed first done): translate  up fro/ roll up from hidden
-
-
-        //morgen: animation in factory funciton setzten.
+getFetchData("https://api.openweathermap.org/data/2.5/weather?q=munich&appid=8d1eb409ef57e4fe5939de84f94bcd77").then(res => {
+    displayFetchedData(res)
+})

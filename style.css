@@ -61,7 +61,7 @@ body {
 }
 
 .backgroundSunny {
-    background-image: url(images/clear\ sky.jpg);
+    background-image: url(images/clear\ sky.jpg );
 }
 
 .backgroundCloudy {
@@ -184,7 +184,7 @@ body {
 }
 
 .weatherInfo {
-    height: 300px;
+    height: 30%;
     backdrop-filter:blur(16px);
     background: linear-gradient( rgba(201, 199, 199, 0.3), rgba(204, 202, 202, 0.3) );
     text-align: center;
@@ -284,26 +284,3 @@ body {
     visibility: hidden;
 }
 
-/* .sun::before, .cloud::before, .thunderstorm::before, .drizzle::before, .rain::before, .snow::before{
-    content: "\f556";
-    font-size: 5rem;
-    font-family: "Font Awesome 5 Free";
-    display: inline-block;
-    color: white;
-    font-weight: 900;
-    font-style: normal;
-    font-variant: normal;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 40px;
-    margin: 0 auto;
-    
-}
-
-
-.sun {
-    position: relative;
-    margin-top: 170px;
-}
- */
