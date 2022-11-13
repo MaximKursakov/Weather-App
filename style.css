@@ -302,6 +302,11 @@ body {
     }
 }
 
+.error-message {
+    position: absolute;
+    font-size: 2rem;
+}
+
 @media only screen and (max-width: 750px) {
     .cityInfo, .weatherInfo-left {
         flex-direction: column;

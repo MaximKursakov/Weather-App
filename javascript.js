@@ -20,6 +20,26 @@ cityButton.addEventListener("click" , () => {
     }, 300);
 })
 
+getFetchData("https://api.openweathermap.org/data/2.5/weather?q=munich&appid=8d1eb409ef57e4fe5939de84f94bcd77").then(res => {
+    displayFetchedData(res)
+})
+
+navigator.geolocation.getCurrentPosition(successLocation,
+    errorLocation, {
+        enableHighAccuracy : true
+    })
+
+function successLocation(position) {
+    console.log(position.coords.latitude)
+    getFetchData(`https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=8d1eb409ef57e4fe5939de84f94bcd77`).then(res => {
+    displayFetchedData(res)
+})
+}
+
+function errorLocation() {
+    console.log("location fetching disabled")
+}
+
 inputCity.addEventListener("keypress", (e) =>{
     if (13 === e.keyCode) {
         const element1 = document.querySelector(".weather")
@@ -211,6 +231,4 @@ async function getFetchData(api) {
     return data
 }
 
-getFetchData("https://api.openweathermap.org/data/2.5/weather?q=munich&appid=8d1eb409ef57e4fe5939de84f94bcd77").then(res => {
-    displayFetchedData(res)
-})
+
