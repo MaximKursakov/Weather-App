@@ -42,7 +42,7 @@
 
 body {
     font-family: raleway;
-    font-weight: 200;
+    font-weight: 400;
     margin: 0;
     overflow-x: hidden
 }
@@ -160,8 +160,8 @@ body {
     font-weight: 300;
     display: flex;
     gap: 10px;
-    margin-left: 60px;
-    margin-top: 60px;
+    margin-left: 5vw;
+    margin-top: 5vw;
     color: white;
 }
 
@@ -179,7 +179,7 @@ body {
 .localTime {
     margin-top: 10px;
     color: white;
-    margin-left: 60px;
+    margin-left: 5vw;
     font-size: 1.2rem;
 }
 
@@ -204,6 +204,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 5%;
 }
 
 .weather {
@@ -225,11 +226,13 @@ body {
     font-weight: 400;
 }
 
+
 .temperatureText {
+    margin-top: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 40px;
+    gap: 35px;
     width: 60%;
     height: 100%;
     text-align: left;
@@ -240,6 +243,7 @@ body {
     align-items: center;
     justify-content: space-evenly;
     width: 40%;
+    height: 100%;
 }
 
 .weatherInfo-right {
@@ -250,7 +254,6 @@ body {
 }
 
 .humidityColumn, .windColumn, .cloudColumn {
-    min-width: 200px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -272,7 +275,6 @@ body {
 }
 
 .cloudColumn {
-    margin-right: 60px;
     border-right: solid grey 1px;
 }
 
@@ -300,6 +302,9 @@ body {
     .windiness, .cloudiness, .humidity {
         border: none;
     }
+    .humidity, .windiness, .cloudiness {
+        padding: 0;
+    }
 }
 
 .error-message {
@@ -310,7 +315,6 @@ body {
 @media only screen and (max-width: 750px) {
     .cityInfo, .weatherInfo-left {
         flex-direction: column;
-        padding: 50px 0;
     }
     .country {
         margin-top: 0;
@@ -318,4 +322,35 @@ body {
     .temperatureText p, .feel, .logo {
         display: none;
     }
+    .weatherInfo-left {
+        height: auto;
+    }
 }
+
+@media only screen and (max-width: 600px) {
+    .weatherInfo-right > * >p {
+        display: none;
+    }
+    .humidity::after {
+        content: "%";
+    }
+    .windiness::after {
+        content: "m/s";
+    }
+    .cloudiness::after {
+        content: "%";
+    }
+    .humidity, .windiness, .cloudiness {
+        font-size: 1.2rem;
+    }
+    .temperature {
+        font-size: 2.7rem;
+    }
+    .fa-solid {
+        scale: .7
+    }
+    .weather {
+        font-size: 1rem;
+    }
+}
+
